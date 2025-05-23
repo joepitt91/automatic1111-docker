@@ -66,4 +66,4 @@ jobs:
           push: true
           sbom: true
           tags: |
-            ghcr.io/joepitt91/automatic1111:${{ github.event_name }}_${{ github.sha }}
+            ghcr.io/joepitt91/automatic1111-dev:${{ github.event_name }}_${{ github.sha }}
