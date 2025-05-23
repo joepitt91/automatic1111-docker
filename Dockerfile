@@ -1,4 +1,4 @@
-FROM docker.io/library/python:3.10-slim
+FROM docker.io/library/python:3.13-slim
 RUN apt-get -yq update &&\
     apt-get -yq install bc curl git libgl1 libglib2.0-bin libtcmalloc-minimal4 &&\
     apt-get -yq autoremove &&\
