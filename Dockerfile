@@ -11,6 +11,7 @@ RUN adduser --system --home /opt/a1111 -uid 999 a1111 &&\
 USER a1111
 WORKDIR /opt
 ARG A1111_VERSION=0.0.0
+ENV A1111_VERSION=${A1111_VERSION}
 RUN git clone --depth 1 --branch ${A1111_VERSION} https://github.com/AUTOMATIC1111/stable-diffusion-webui a1111
 COPY --chown=a1111:a1111 webui-user.sh /opt/a1111/webui-user.sh
 WORKDIR /opt/a1111
@@ -23,3 +24,12 @@ ENTRYPOINT [ "/opt/a1111/webui.sh" ]
 EXPOSE 7860
 VOLUME /data
 HEALTHCHECK CMD ["sh", "-c", "curl -fk http://127.0.0.1:7860/ || exit 1"]
+LABEL org.opencontainers.image.authors="joepitt91 via https://github.com/joepitt91/automatic1111-docker/issues"
+LABEL org.opencontainers.image.base.name=docker.io/library/python:3.10-slim
+LABEL org.opencontainers.image.description="AUTOMATIC1111 Stable Diffusion Web UI is an open source generative artificial intelligence program that allows users to generate images from a text prompt."
+LABEL org.opencontainers.image.documentation=https://github.com/joepitt91/automatic1111-docker
+LABEL org.opencontainers.image.licenses=GPL-3.0-only
+LABEL org.opencontainers.image.source=https://github.com/joepitt91/automatic1111-docker
+LABEL org.opencontainers.image.title="AUTOMATIC1111"
+LABEL org.opencontainers.image.url=https://github.com/joepitt91/automatic1111-docker
+LABEL org.opencontainers.image.version=${A1111_VERSION}
