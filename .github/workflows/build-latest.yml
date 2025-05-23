@@ -87,7 +87,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Update BASE_IMAGE
-        uses: mmoyaferrer/set-github-variable@v1.0.0
+        uses: mmoyaferrer/set-github-variable@v9.9.5
         with:
           name: BASE_IMAGE
           repository: ${{ github.repository }}
@@ -95,7 +95,7 @@ jobs:
           value: ${{ needs.dependencies.outputs.python_digest }}
 
       - name: Update A1111_VERSION
-        uses: mmoyaferrer/set-github-variable@v1.0.0
+        uses: mmoyaferrer/set-github-variable@v9.9.5
         with:
           name: A1111_VERSION
           repository: ${{ github.repository }}
