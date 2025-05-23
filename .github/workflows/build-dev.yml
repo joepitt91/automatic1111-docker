@@ -1,0 +1,69 @@
+# SPDX-FileCopyrightText: 2025 Joe Pitt
+#
+# SPDX-License-Identifier: GPL-3.0-only
+
+name: Build Development Images
+on:
+  push:
+    branches: 
+      - "*"
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+  packages: write
+jobs:
+  dependencies:
+    name: Get Dependency Information
+    runs-on: ubuntu-latest
+    outputs:
+      python_digest: ${{ steps.digest.outputs.digest }}
+      a1111_version: ${{ steps.a1111.outputs.tag }}
+    steps:
+      - name: Get Current Digest for Python 3.10 image
+        id: digest
+        uses: joepitt91/action-digest-from-dockerhub-image@v1
+        with:
+          dockerhub_username: ${{ secrets.DOCKER_USER }}
+          dockerhub_token: ${{ secrets.DOCKER_PASSWORD }}
+          repository: python
+          tag: 3.10-slim
+
+      - name: Get Latest AUTOMATIC1111 Version
+        id: a1111
+        uses: joepitt91/action-version-from-github-tag@v1
+        with:
+          token: ${{ secrets.PUBLIC_READ_TOKEN }}
+          owner: AUTOMATIC1111
+          repository: stable-diffusion-webui
+
+  build:
+    name: Build Image
+    runs-on: ubuntu-latest
+    needs:
+      - dependencies
+    steps:
+      - name: Image Information
+        run: echo "Building image of AUTOMATIC1111 ${{ needs.dependencies.outputs.a1111_version }} from python:3.10-slim with digest ${{ needs.dependencies.outputs.python_digest }}"
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ github.token }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and Push Image
+        uses: docker/build-push-action@v6
+        with:
+          build-args: |
+            A1111_VERSION=${{ needs.dependencies.outputs.a1111_version }}
+          provenance: true
+          pull: true
+          push: true
+          sbom: true
+          tags: |
+            ghcr.io/joepitt91/automatic1111:${{ github.event_name }}_${{ github.sha }}
