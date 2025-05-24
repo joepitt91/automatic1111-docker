@@ -1,6 +1,6 @@
 FROM docker.io/library/python:3.10-slim
 RUN apt-get -yq update &&\
-    apt-get -yq install bc curl git libgl1 libglib2.0-bin libtcmalloc-minimal4 &&\
+    apt-get -yq install bc curl gcc git libgl1 libglib2.0-bin libtcmalloc-minimal4 &&\
     apt-get -yq autoremove &&\
     apt-get -yq clean &&\
     pip3 install --upgrade --no-cache-dir --quiet pip setuptools
@@ -13,13 +13,11 @@ WORKDIR /opt
 ARG A1111_VERSION=0.0.0
 ENV A1111_VERSION=${A1111_VERSION}
 RUN git clone --depth 1 --branch ${A1111_VERSION} https://github.com/AUTOMATIC1111/stable-diffusion-webui a1111
-COPY --chown=a1111:a1111 webui-user.sh /opt/a1111/webui-user.sh
 WORKDIR /opt/a1111
 RUN pip3 install --upgrade --no-cache-dir --quiet --user --no-warn-script-location -r requirements_versions.txt &&\
-    pip3 install --upgrade --no-cache-dir --quiet --user --no-warn-script-location torch torchvision torchaudio &&\
-    pip3 install --upgrade --no-cache-dir --quiet --user --no-warn-script-location xformers --index-url https://download.pytorch.org/whl/cu124 &&\
-    git config --global --add safe.directory /opt/a1111 &&\
-    python -c 'from modules import launch_utils; launch_utils.args.skip_torch_cuda_test=True; launch_utils.prepare_environment()'
+    git config --global --add safe.directory /opt/a1111
+COPY --chown=a1111:nogroup webui-user.sh /opt/a1111/webui-user.sh
+RUN /opt/a1111/webui.sh --exit --reinstall-torch --reinstall-xformers --skip-torch-cuda-test
 ENTRYPOINT [ "/opt/a1111/webui.sh" ]
 EXPOSE 7860
 VOLUME /data
