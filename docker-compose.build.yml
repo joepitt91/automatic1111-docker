@@ -1,0 +1,25 @@
+---
+services:
+  automatic1111_build:
+    build:
+      args:
+        - A1111_VERSION=v1.10.1
+      context: .
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - capabilities: [ gpu ]
+              count: all
+              driver: nvidia
+    env_file:
+      - path: a1111.env
+        required: false
+    ports:
+      - '127.0.0.1:7860:7860'
+    pull_policy: always
+    restart: unless-stopped
+    volumes:
+      - automatic1111:/data
+volumes:
+  automatic1111: null
