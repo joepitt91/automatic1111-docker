@@ -8,9 +8,11 @@ on:
     inputs:
       version:
         description: The version to build, e.g. 1.10.1
+        required: true
+        type: string
       tag_level:
         default: patch
-        description: What highest level of tagging to apply to this image.
+        description: The highest level of tagging to apply.
         options:
           - major
           - minor
