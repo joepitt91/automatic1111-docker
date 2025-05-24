@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: The version to build, e.g. 1.10.1
+        description: The version to build, e.g. `v1.10.1`
       tag_level:
         default: patch
         description: What highest level of tagging to apply to this image.
