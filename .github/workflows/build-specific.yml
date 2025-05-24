@@ -69,7 +69,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           build-args: |
-            A1111_VERSION=${{ inputs.version }}
+            A1111_VERSION=v${{ inputs.version }}
           provenance: true
           pull: true
           push: true
@@ -84,7 +84,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           build-args: |
-            A1111_VERSION=${{ inputs.version }}
+            A1111_VERSION=v${{ inputs.version }}
           provenance: true
           pull: true
           push: true
