@@ -4,9 +4,6 @@
 
 name: Build Development Image
 on:
-  push:
-    branches: 
-      - "*"
   pull_request:
   workflow_dispatch:
 permissions:
@@ -43,6 +40,9 @@ jobs:
     needs:
       - dependencies
     steps:
+      - name: Free Up Disk Space
+        uses: jlumbroso/free-disk-space@main
+
       - name: Image Information
         run: echo "Building image of AUTOMATIC1111 ${{ needs.dependencies.outputs.a1111_version }} from python:3.10-slim with digest ${{ needs.dependencies.outputs.python_digest }}"
 
