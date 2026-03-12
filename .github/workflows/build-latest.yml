@@ -68,7 +68,7 @@ jobs:
         uses: docker/setup-buildx-action@v4
 
       - name: Build and Push Image
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           build-args: |
             A1111_VERSION=${{ needs.dependencies.outputs.a1111_version }}
