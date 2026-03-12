@@ -58,7 +58,7 @@ jobs:
         run: echo "Building image of AUTOMATIC1111 ${{ needs.dependencies.outputs.a1111_version }} from python:3.10-slim with digest ${{ needs.dependencies.outputs.python_digest }}"
 
       - name: Login to GitHub Container Registry
-        uses: docker/login-action@v3
+        uses: docker/login-action@v4
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
